@@ -1,0 +1,59 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  line-height: 50px;
+}
+.menu .menuheader {
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+.menu .menuheader h1 {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+#flyoutMenu {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: whitesmoke;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: transform 0.3s;
+  z-index: 1;
+  overflow: scroll;
+}
+
+#flyoutMenu.hide {
+  transform: translate(-100vw, 0);
+}
+
+#flyoutMenu.show {
+  transform: translate(0, 0);
+  overflow: hidden;
+}
+
+/* .navbar-collapse {
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  width: 100vw;
+  height: 100vh;
+  transition: transform 0.3s cubic-bezier(0, 0.52, 0, 1);
+  z-index: 1000;
+}
+.navbar-collapse.collapse {
+  transform: translate3d(-100vw, 0, 0);
+}
+.navbar-collapse.collapse.show {
+  transform: translate3d(0vw, 0, 0);
+} */
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
