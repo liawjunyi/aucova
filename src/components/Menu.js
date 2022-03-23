@@ -1,3 +1,4 @@
+import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 function Menu(props) {
   let className = "menu";
   if (props.menuVisibility) {
@@ -7,9 +8,12 @@ function Menu(props) {
   }
 
   return (
-    <div className={className} id="flyoutMenu" onClick={props.handleMouseDown}>
+    <div className={className} id="flyoutMenu">
       <div className="menuheader">
-        <div className="position-absolute btn-close end-0 "></div>
+        <button
+          onClick={props.handleMouseDown}
+          className="position-absolute btn-close btn "
+        ></button>
 
         <h1>AUCOVA</h1>
         <h4>Jewellery Asset Management</h4>
@@ -17,19 +21,19 @@ function Menu(props) {
 
       <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
         <li className="nav-item">
-          <a className="nav-link active" aria-current="page" href="#">
+          <Link style={{ textDecoration: "none" }} to="/">
             Home
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">
+          <Link style={{ textDecoration: "none" }} to="/dispatch">
             Aucova Dispatch
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">
+          <Link style={{ textDecoration: "none" }} to="/portfolio">
             My Portfolio
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
           <a className="nav-link " href="#">

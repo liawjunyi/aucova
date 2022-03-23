@@ -1,21 +1,19 @@
 import Header from "../components/Header";
+import Carousell from "../components/Carousell";
+import Search from "../components/Search";
+import { Link } from "react-router-dom";
 
 export default function Homepage() {
   return (
     <div>
-      <Header />
+      <Header title="AUCOVA" />
+      <Search />
 
-      <form class="d-flex">
-        <input
-          className="form-control me-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <button class="btn btn-outline-success" type="submit">
-          Search
-        </button>
-      </form>
+      <Carousell />
+
+      <Link className="position-absolute end-0" to="/dispatch">
+        Read More
+      </Link>
     </div>
   );
 }

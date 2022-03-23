@@ -1,3 +1,12 @@
+a {
+  color: grey;
+}
+a:hover {
+  color: #00f;
+}
+.search {
+  margin: 10px;
+}
 .menu {
   display: flex;
   flex-direction: column;
@@ -7,7 +16,7 @@
   margin-top: 50px;
   margin-bottom: 100px;
 }
-.menu .menuheader h1 {
+.menu > .menuheader > h1 {
   text-align: center;
   margin-top: 50px;
 }
@@ -16,13 +25,21 @@
   border: none;
 }
 
+.btn-close {
+  right: 30px;
+}
+
+#roundButton {
+  border: none;
+  background-color: white;
+}
 #flyoutMenu {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: whitesmoke;
+  background-color: white;
   position: fixed;
   left: 0;
   top: 0;
@@ -40,20 +57,28 @@
   overflow: hidden;
 }
 
-/* .navbar-collapse {
-  position: fixed;
-  left: 0;
-  top: 0;
+.navigation-tabs {
+  border-width: 0;
+}
 
-  width: 100vw;
-  height: 100vh;
-  transition: transform 0.3s cubic-bezier(0, 0.52, 0, 1);
-  z-index: 1000;
+.nav-link {
+  border: none;
+  background-color: white;
+  color: grey;
 }
-.navbar-collapse.collapse {
-  transform: translate3d(-100vw, 0, 0);
+.nav-link.active {
+  border-bottom: solid 1px grey;
+  color: black;
 }
-.navbar-collapse.collapse.show {
-  transform: translate3d(0vw, 0, 0);
-} */
+
+.public,
+.watchlist {
+  height: 400px;
+}
+
+@media (max-width: 400px) {
+  .search .btn {
+    display: none;
+  }
+}
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
