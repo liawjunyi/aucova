@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Accordion from "react-bootstrap/Accordion";
 import Tabs from "../components/Tabs";
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 
+import axios from "axios";
+
 function MyPortfolio() {
+  const [items, setItems] = useState([]);
+
+  const fetchItems = async () => {
+    const res = await axios.get("http://localhost:3000/items");
+    setItems(res.data);
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
   return (
     <div>
       <Header title="My Portfolio" />
-
       <div className="flex-column ">
         <div className="d-flex justify-content-center">
           <Avatar
@@ -26,7 +38,6 @@ function MyPortfolio() {
 
         <h1 className=" d-flex justify-content-center">The Duchess of Bling</h1>
       </div>
-
       <Accordion style={{ width: "100%" }} defaultActiveKey="0">
         <Accordion.Item eventKey="0">
           <Accordion.Header>
@@ -63,7 +74,12 @@ function MyPortfolio() {
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
-      <Tabs />
+      <Tabs items={items} />
+      <Link to="/portfolio/newentry">
+        <button className={`addButton ${items.length > 0 ? "hasItems" : ""} `}>
+          +
+        </button>
+      </Link>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import Dispatch from "./pages/Dispatch";
 import Assessment from "./pages/Assessment";
 import MyPortfolio from "./pages/MyPortfolio";
 import Item from "./pages/Item";
+import NewEntry from "./pages/NewEntry";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Homepage />}></Route>
         <Route path="/dispatch" element={<Dispatch />} />
         <Route path="/portfolio" element={<MyPortfolio />} />
+        <Route path="/portfolio/newentry" element={<NewEntry />} />
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/item/:id" element={<Item />} />
       </Routes>

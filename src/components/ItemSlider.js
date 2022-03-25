@@ -1,6 +1,5 @@
 import React from "react";
 import Slider from "react-slick";
-import items from "../db.json";
 
 const ItemSlider = (props) => {
   const settings = {
@@ -13,11 +12,9 @@ const ItemSlider = (props) => {
   return (
     <div>
       <Slider {...settings}>
-        {items.map((item, index) => (
-          <div key={index}>
-            <img src={item.img} width="100%" height="150"></img>
-          </div>
-        ))}
+        <div>
+          <img src={props.img} width="100%" height="150"></img>
+        </div>
       </Slider>
     </div>
   );

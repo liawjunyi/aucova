@@ -1,8 +1,8 @@
 import React from "react";
-import items from "../db.json";
+
 import { Link } from "react-router-dom";
 
-function Tabs() {
+function Tabs(props) {
   return (
     <>
       <nav>
@@ -58,19 +58,22 @@ function Tabs() {
         >
           <div class="container">
             <div class="row row-cols-2">
-              {items.map((item) => (
-                <div className="col">
-                  <Link to={`/item/${item.id}`}>
-                    <img
-                      style={{
-                        height: "200px",
-                        width: "160px",
-                      }}
-                      src={item.img}
-                    />
-                  </Link>
-                </div>
-              ))}
+              {props.items.map((item) => {
+                console.log(item);
+                return (
+                  <div className="col">
+                    <Link to={`/item/${item.id}`}>
+                      <img
+                        style={{
+                          height: "200px",
+                          width: "160px",
+                        }}
+                        src={item.img}
+                      />
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
