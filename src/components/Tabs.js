@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-function Tabs(props) {
+function Tabs({ items }) {
   return (
     <>
       <nav>
@@ -58,17 +58,18 @@ function Tabs(props) {
         >
           <div class="container">
             <div class="row row-cols-2">
-              {props.items.map((item) => {
+              {items.map((item) => {
                 console.log(item);
+                const { id, img } = item;
                 return (
-                  <div className="col">
-                    <Link to={`/item/${item.id}`}>
+                  <div className="col" key={id}>
+                    <Link to={`/item/${id}`}>
                       <img
                         style={{
                           height: "200px",
                           width: "160px",
                         }}
-                        src={item.img}
+                        src={img[0]}
                       />
                     </Link>
                   </div>

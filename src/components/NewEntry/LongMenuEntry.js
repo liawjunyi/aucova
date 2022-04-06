@@ -6,10 +6,12 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const ITEM_HEIGHT = 48;
 
-export default function LongMenu(props) {
+export default function LongMenuEntry({ options, deleteEntry }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
+    event.preventDefault();
+
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -43,10 +45,8 @@ export default function LongMenu(props) {
           },
         }}
       >
-        {props.options.map((option) => (
-          <MenuItem key={option} onClick={props.deleteEntry}>
-            {option}
-          </MenuItem>
+        {options.map((option) => (
+          <MenuItem key={option}>{option}</MenuItem>
         ))}
       </Menu>
     </div>

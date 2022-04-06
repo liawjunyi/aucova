@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 import ItemSlider from "../components/ItemSlider";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,19 +13,19 @@ function Item() {
   const [items, setItems] = useState([]);
 
   const fetchItems = async () => {
-    const res = await axios
-      .get("http://localhost:3000/items")
-      .catch((err) => console.log(err.message));
-    console.log(res.data);
-    setItems(res.data);
+    const res = await getDocs(collection(db, "items"));
+    console.log(res.docs);
+    res.forEach((doc) => {
+      console.log(doc.data());
+    });
   };
 
   useEffect(() => {
-    console.log("test");
     fetchItems();
   }, []);
+  console.log(items);
 
-  const id = parseInt(useParams().id);
+  const id = useParams().id;
 
   const options = [
     "Edit",
@@ -36,12 +37,7 @@ function Item() {
   ];
 
   const deleteItem = async () => {
-    await axios
-      .delete("http://localhost:3000/items/" + id)
-      .then(() => console.log("can"))
-      .catch((err) => {
-        console.log(err.message);
-      });
+    await deleteDoc(doc(db, "items", id));
   };
   let navigate = useNavigate();
   const deleteEntry = () => {
@@ -50,7 +46,7 @@ function Item() {
     navigate("/portfolio");
   };
 
-  const item = items.find((item) => item.id === id);
+  const item = items.find((item) => item.id == id);
 
   return (
     <>

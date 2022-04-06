@@ -1,24 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
-import Accordion from "react-bootstrap/Accordion";
+import { Accordion } from "react-bootstrap";
 import Tabs from "../components/Tabs";
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-
+import { collection, onSnapshot, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 import axios from "axios";
 
 function MyPortfolio() {
   const [items, setItems] = useState([]);
 
   const fetchItems = async () => {
-    const res = await axios.get("http://localhost:3000/items");
-    setItems(res.data);
+    await onSnapshot(collection(db, "items"), (res) => {
+      res.forEach((doc) => {
+        console.log(doc.data());
+        setItems((prev) => [...prev, doc.data()]);
+      });
+    });
   };
 
   useEffect(() => {
     fetchItems();
   }, []);
-
+  console.log(items);
   return (
     <div>
       <Header title="My Portfolio" />
@@ -75,11 +80,28 @@ function MyPortfolio() {
         </Accordion.Item>
       </Accordion>
       <Tabs items={items} />
-      <Link to="/portfolio/newentry">
-        <button className={`addButton ${items.length > 0 ? "hasItems" : ""} `}>
-          +
-        </button>
-      </Link>
+      <div className={`item-container ${items.length > 0 ? "active" : ""}`}>
+        <div>
+          <div
+            className={`item-container-text ${
+              items.length > 0 ? "active" : ""
+            }`}
+          >
+            Create your Jewellery Portfolio now
+          </div>
+          <div
+            className={`item-container-body ${
+              items.length > 0 ? "active" : ""
+            }`}
+          >
+            <Link to="/portfolio/newentry">
+              <button className="add-btn">
+                <span>+</span>
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

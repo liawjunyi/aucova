@@ -9,12 +9,10 @@ export default function Header(props) {
   };
 
   return (
-    <nav className=" navbar navbar-expand-lg navbar-light bg-white">
+    <nav className=" navbar navbar-expand-lg navbar-light ">
       <div className="container">
         <MenuButton handleMouseDown={handleMouseDown} />
-        <a className="navbar-brand mx-auto" href="#">
-          {props.title}
-        </a>
+        <div className="navbar-title mx-auto">{props.title}</div>
         <Menu menuVisibility={visible} handleMouseDown={handleMouseDown} />
         {props.children}
       </div>

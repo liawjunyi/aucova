@@ -2,8 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const { randomBytes } = require("crypto");
 const app = express();
-
-app.use(express.json());
+app.use(express.json({ limit: "10000mb", extended: true }));
+app.use(express.urlencoded({ limit: "10000mb", extended: true }));
 app.use(cors());
 
 let items = [];
@@ -19,9 +19,17 @@ app.get("/items/:id", (req, res) => {
 });
 
 app.post("/items", (req, res) => {
-  items.push(req.body);
-  console.log(req.body);
-  res.status(201).send(req.body);
+  const buf = randomBytes(12).toString("hex");
+
+  const { title, img, description } = req.body;
+  items.push({
+    id: buf,
+    title: title,
+    img: img,
+    description: description,
+  });
+
+  res.status(201).send(items);
 });
 
 app.delete("/items/:id", (req, res) => {

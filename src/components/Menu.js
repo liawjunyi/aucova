@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+
 function Menu(props) {
   let className = "menu";
   if (props.menuVisibility) {
