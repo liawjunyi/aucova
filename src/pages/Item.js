@@ -7,17 +7,18 @@ import ItemSlider from "../components/ItemSlider";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import LongMenuItem from "../components/LongMenuItem";
-import axios from "axios";
 
 function Item() {
   const [items, setItems] = useState([]);
 
+  const jewellery = [];
   const fetchItems = async () => {
     const res = await getDocs(collection(db, "items"));
-    console.log(res.docs);
+
     res.forEach((doc) => {
-      console.log(doc.data());
+      jewellery.push(doc.data());
     });
+    setItems([...jewellery]);
   };
 
   useEffect(() => {
@@ -56,7 +57,24 @@ function Item() {
             <LongMenuItem deleteEntry={deleteEntry} options={options} />
           </Header>
           <ItemSlider img={item.img} />
-          <div>{item.title}</div>
+          <div className="form">
+            <div>
+              <label>Diamonds / Gem Stones</label>
+              <div>{item.type}</div>
+            </div>
+            <div>
+              <label>Description</label>
+              <div>{item.description}</div>
+            </div>
+            <div>
+              <label>Location</label>
+              <div>{item.location}</div>
+            </div>
+            <div>
+              <label>Purchase Price</label>
+              <div>{item.purchase_price}</div>
+            </div>
+          </div>
         </>
       )}
     </>

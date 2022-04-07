@@ -1,21 +1,26 @@
 @font-face {
-  font-family: "Avenir Next LT Pro";
-  src: "/fonts\Avenir Next LT Pro\Avenir Next LT Pro Regular\Avenir Next LT Pro Regular.otf";
+  font-family: "Avenir Next";
 
-  font-weight: normal;
-  font-style: normal;
+  src: url("../public/fonts/AvenirLTProMedium.otf");
 }
 
+body {
+  padding: 0 !important;
+  overflow: auto !important;
+}
 :root {
   --primary: #b3995b;
 }
 
+label {
+  font-family: "Avenir Next";
+  font-size: 18px;
+  letter-spacing: 0.85px;
+}
 a {
   color: grey;
 }
-a:hover {
-  color: #00f;
-}
+
 .search {
   margin: 10px;
 }
@@ -207,6 +212,32 @@ a:hover {
 .modal-content {
   display: flex;
   justify-content: center;
+}
+
+/*-------- form input fields ---------------*/
+.form {
+  margin: 17px;
+}
+
+.form input,
+.form label {
+  display: block;
+  text-align: left;
+  width: 100%;
+}
+
+.form input {
+  border: solid black;
+  border-width: 0 0 1px 0;
+}
+
+.form div {
+  display: flex;
+  flex-direction: column;
+}
+
+.form > div > div {
+  min-height: 30px;
 }
 @media (max-width: 400px) {
   .search .btn {

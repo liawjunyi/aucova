@@ -3,7 +3,8 @@ import Slider from "react-slick";
 
 const ItemSlider = ({ img }) => {
   const settings = {
-    infinite: true,
+    infinite: false,
+    centerMode: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,

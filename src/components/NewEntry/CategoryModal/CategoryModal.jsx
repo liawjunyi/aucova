@@ -1,13 +1,23 @@
 import React from "react";
 import "./Modal.css";
 
-function CategoryModal({ show, onClose }) {
+function CategoryModal({ show, onClose, setCategory }) {
   let className = "categorymenu";
   if (show) {
     className += " show";
   } else {
     className += " hide";
   }
+
+  const categories = [
+    "Rings",
+    "Earrings",
+    "Pendants / Necklaces",
+    "Bracelets / Bangles",
+    "Brooches",
+    "Gems",
+    "Others",
+  ];
 
   return (
     <div className={className}>
@@ -22,15 +32,18 @@ function CategoryModal({ show, onClose }) {
         ></button>
       </div>
 
-      <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-        <li className="nav-item">Rings</li>
-        <li className="nav-item">Earrings</li>
-        <li className="nav-item">Bracelets/Bangles</li>
-        <li className="nav-item">
-          <a className="nav-link " href="#">
-            Brooches
-          </a>
-        </li>
+      <ul className="navbar-nav mb-2 mb-lg-0">
+        {categories.map((category) => (
+          <li
+            className="nav-item"
+            onClick={() => {
+              setCategory(category);
+              onClose();
+            }}
+          >
+            {category}
+          </li>
+        ))}
       </ul>
     </div>
   );

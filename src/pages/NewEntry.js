@@ -19,7 +19,7 @@ function NewEntry() {
     img: "",
     type: "",
     description: "",
-    stored_at: "",
+    location: "",
     purchase_price: null,
   });
   const [categoryClicked, setCategoryClicked] = useState(null);
@@ -240,6 +240,7 @@ function NewEntry() {
               setInput={setInput}
               input={input}
               category={categoryClicked}
+              setCategory={setCategoryClicked}
             />
             <button onClick={handleSubmit} type="submit">
               Save(Private)

@@ -29,6 +29,7 @@ export default function LongMenuItem(props) {
         <MoreVertIcon />
       </IconButton>
       <Menu
+        inputProps={{ MenuProps: { disableScrollLock: true } }}
         id="long-menu"
         MenuListProps={{
           "aria-labelledby": "long-button",

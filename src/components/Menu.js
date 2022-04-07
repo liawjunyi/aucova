@@ -20,7 +20,7 @@ function Menu(props) {
         <h4>Jewellery Asset Management</h4>
       </div>
 
-      <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
+      <ul className="navbar-nav  mb-2 mb-lg-0">
         <li className="nav-item">
           <Link style={{ textDecoration: "none" }} to="/">
             Home

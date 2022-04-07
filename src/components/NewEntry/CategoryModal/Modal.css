@@ -40,4 +40,12 @@
 
 .nav-item {
   line-height: 26px;
+  height: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-nav {
+  width: 100%;
 }
