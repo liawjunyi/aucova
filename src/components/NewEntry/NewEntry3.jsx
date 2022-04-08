@@ -1,9 +1,7 @@
-import Accordion from "react-bootstrap/Accordion";
-import { AccordionSummary } from "@mui/material";
-
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import CategoryModal from "./CategoryModal/CategoryModal";
 import ItemSliderEntry from "./ItemSliderEntry";
+import Select from "react-select";
 
 function NewEntry3({
   imageFiles,
@@ -24,6 +22,14 @@ function NewEntry3({
     });
     console.log(input);
   };
+
+  const options = [
+    { value: "Diamonds", label: "Diamonds" },
+    { value: "Ruby", label: "Ruby" },
+    { value: "Sapphire", label: "Sapphire" },
+    { value: "Ruby", label: "Ruby" },
+    { value: "Ruby", label: "Ruby" },
+  ];
   return (
     <div>
       <ItemSliderEntry imageFiles={imageFiles} selectedImage={selectedImage} />
@@ -43,11 +49,13 @@ function NewEntry3({
           setCategory={setCategory}
         />
       </div>
+
       <div className="form">
-        <div>
+        <div className="form-container">
           <label>
             Title of Piece
             <input
+              autocomplete="off"
               name="title"
               type="text"
               onChange={handleInputChange}
@@ -55,21 +63,31 @@ function NewEntry3({
             />
           </label>
         </div>
-        <div>
+        <div className="form-container">
           <label>
             Diamonds / Gem Stones
-            <input
-              name="type"
-              type="text"
-              onChange={handleInputChange}
-              value={input.type}
+            <Select
+              className="basic-multi-select"
+              classNamePrefix="select"
+              placeholder="Eg. Diamond, Ruby, Sapphire"
+              options={options}
+              onChange={(item) =>
+                setInput((prev) => {
+                  return {
+                    ...prev,
+                    type: item.label,
+                  };
+                })
+              }
             />
+            <p>{input.type}</p>
           </label>
         </div>
-        <div>
+        <div className="form-container">
           <label>
             Description
             <input
+              autocomplete="off"
               name="description"
               type="text"
               onChange={handleInputChange}
@@ -77,10 +95,11 @@ function NewEntry3({
             />
           </label>
         </div>
-        <div>
+        <div className="form-container">
           <label>
             Location
             <input
+              autocomplete="off"
               name="location"
               type="text"
               onChange={handleInputChange}
@@ -88,10 +107,11 @@ function NewEntry3({
             />
           </label>
         </div>
-        <div>
+        <div className="form-container">
           <label>
             Purchase Price
             <input
+              autocomplete="off"
               name="purchase_price"
               type="number"
               onChange={handleInputChange}
