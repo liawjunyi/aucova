@@ -3,27 +3,27 @@ import "./UploadModal.css";
 import { usePhotoGallery } from "../../../hooks/usePhotoGallery";
 import { FormContext } from "../../../context/FormContext";
 
-function UploadModal({ showUpload, setShowUpload }) {
-  const { setReceipts } = useContext(FormContext);
+function UploadModal({ showUpload2, setShowUpload2 }) {
+  const { setCertificate } = useContext(FormContext);
   const fileUploadRef = useRef(null);
   const uploadFile = (e) => {
     const formData = new FormData();
 
     formData.append("File", e.target.files[0]);
     console.log(...formData);
-    setReceipts((prev) => [
+    setCertificate((prev) => [
       ...prev,
       {
         filepath: e.target.files[0].name,
         webviewPath: formData,
       },
     ]);
-    setShowUpload(false);
+    setShowUpload2(false);
   };
   const { takePhoto, photos } = usePhotoGallery();
   useEffect(() => {
     if (photos) {
-      setReceipts((prev) => {
+      setCertificate((prev) => {
         console.log(photos);
         const fileName = new Date().getTime() + ".jpeg";
         return [
@@ -40,15 +40,17 @@ function UploadModal({ showUpload, setShowUpload }) {
   return (
     <>
       <div>
-        <div className={`upload-modal ${showUpload ? "show" : "hide"}`} />
-        <div className={`upload-modal-content ${showUpload ? "show" : "hide"}`}>
+        <div className={`upload-modal ${showUpload2 ? "show" : "hide"}`} />
+        <div
+          className={`upload-modal-content ${showUpload2 ? "show" : "hide"}`}
+        >
           <div className="upload-modal-body">
             <div
               className="upload-button"
               onClick={() => {
                 takePhoto();
 
-                setShowUpload(false);
+                setShowUpload2(false);
               }}
             >
               Take a photo
@@ -69,7 +71,7 @@ function UploadModal({ showUpload, setShowUpload }) {
               className="cancel-button"
               onClick={(e) => {
                 e.preventDefault();
-                setShowUpload(false);
+                setShowUpload2(false);
               }}
             >
               Cancel

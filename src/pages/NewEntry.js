@@ -29,6 +29,11 @@ function NewEntry() {
   const [imageFiles, setImageFiles] = useState([]);
   const [receipts, setReceipts] = useState([]);
   const [certificate, setCertificate] = useState([]);
+  const [certificateType, setCertificateType] = useState(null);
+  const [insurer, setInsurer] = useState(null);
+  const [insuredValue, setInsuredValue] = useState(null);
+  const [inheritanceName, setInheritanceName] = useState(null);
+  const [additionalComments, setAdditionalComments] = useState(null);
   useEffect(() => {
     setInput((prev) => {
       return {
@@ -43,6 +48,8 @@ function NewEntry() {
   };
 
   console.log(receipts);
+  console.log(certificate);
+  console.log(certificateType);
   const handleClose = () => setShow(false);
   const handleSave = () => {
     //   save as draft function
@@ -99,6 +106,11 @@ function NewEntry() {
           receipts,
           certificate,
           setCertificate,
+          setCertificateType,
+          setInsurer,
+          setInsuredValue,
+          setInheritanceName,
+          setAdditionalComments,
         }}
       >
         <form>
@@ -172,42 +184,42 @@ function NewEntry() {
                 </div>
                 <input
                   type="radio"
-                  value="rings"
+                  value="Rings"
                   ref={ringsRef}
                   hidden
                   onChange={categoryOnClick}
                 />
                 <input
                   type="radio"
-                  value="earrings"
+                  value="Earrings"
                   ref={earringsRef}
                   hidden
                   onChange={categoryOnClick}
                 />
                 <input
                   type="radio"
-                  value="pendants"
+                  value="Pendants"
                   ref={pendantsRef}
                   hidden
                   onChange={categoryOnClick}
                 />
                 <input
                   type="radio"
-                  value="bracelets"
+                  value="Bracelets"
                   ref={braceletsRef}
                   hidden
                   onChange={categoryOnClick}
                 />
                 <input
                   type="radio"
-                  value="brooches"
+                  value="Brooches"
                   ref={broochesRef}
                   hidden
                   onChange={categoryOnClick}
                 />
                 <input
                   type="radio"
-                  value="others"
+                  value="Others"
                   ref={othersRef}
                   hidden
                   onChange={categoryOnClick}
@@ -240,7 +252,7 @@ function NewEntry() {
           {state === 3 && (
             <>
               <HeaderEntry
-                title="New Entry"
+                title="Add Details"
                 leftButton={<img src="/fixed/Vector.png" />}
                 handleLeftButton={(e) => {
                   e.preventDefault();

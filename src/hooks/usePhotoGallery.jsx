@@ -1,36 +1,22 @@
-import { useState, useEffect, useContext } from "react";
-import { FormContext } from "../context/FormContext";
-import {
-  Camera,
-  CameraResultType,
-  CameraSource,
-  Photo,
-} from "@capacitor/camera";
-import { Filesystem, Directory } from "@capacitor/filesystem";
-import { Storage } from "@capacitor/storage";
-import { Capacitor } from "@capacitor/core";
+import { useState } from "react";
+
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
 export function usePhotoGallery() {
-  const { input, setInput, receipts, setReceipts } = useContext(FormContext);
+  const [photos, setPhotos] = useState();
   const takePhoto = async (e) => {
+    setPhotos();
     const photo = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
       quality: 100,
     });
 
-    console.log(e.target);
-    const fileName = new Date().getTime() + ".jpeg";
-    setReceipts((prev) => [
-      ...prev,
-      {
-        filepath: fileName,
-        webviewPath: photo.webPath,
-      },
-    ]);
+    setPhotos(photo);
   };
 
   return {
     takePhoto,
+    photos,
   };
 }

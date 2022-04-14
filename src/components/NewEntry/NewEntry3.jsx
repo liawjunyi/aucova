@@ -3,18 +3,23 @@ import CategoryModal from "./CategoryModal/CategoryModal";
 import ItemSliderEntry from "./ItemSliderEntry";
 import Select from "react-select";
 import UploadModal from "./UploadModal/UploadModal";
-
+import UploadModal2 from "./UploadModal/UploadModal2";
 import { FormContext } from "../../context/FormContext";
 import {
   options_type,
   options_currency,
+  options_certificate,
   typeStyle,
   currencyStyle,
+  certificateStyle,
 } from "./SelectStyles";
 
 function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
   const [show, setShow] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
+  const [showUpload2, setShowUpload2] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [expanded2, setExpanded2] = useState(false);
   const {
     input,
     setInput,
@@ -22,6 +27,11 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
     setReceipts,
     certificate,
     setCertificate,
+    setCertificateType,
+    setInsurer,
+    setInsuredValue,
+    setInheritanceName,
+    setAdditionalComments,
   } = useContext(FormContext);
   const handleInputChange = (e) => {
     const { value, name } = e.target;
@@ -38,7 +48,16 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
     e.preventDefault();
     setShowUpload(true);
   };
+  const openUpload2 = (e) => {
+    e.preventDefault();
 
+    setShowUpload2(true);
+  };
+  const deleteCertificate = (removeIndex) => {
+    setCertificate(() => {
+      return certificate.filter((item, index) => index !== removeIndex);
+    });
+  };
   const deleteReceipts = (removeIndex) => {
     setReceipts(() => {
       return receipts.filter((item, index) => index !== removeIndex);
@@ -47,6 +66,7 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
   return (
     <div>
       <UploadModal showUpload={showUpload} setShowUpload={setShowUpload} />
+      <UploadModal2 showUpload2={showUpload2} setShowUpload2={setShowUpload2} />
       <ItemSliderEntry imageFiles={imageFiles} selectedImage={selectedImage} />
       <p>Tap photos to delete or replace</p>
       <div>
@@ -91,7 +111,7 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
               options={options_type}
               onChange={(item) => {
                 input.type.includes(item.label)
-                  ? console.log("already in it")
+                  ? console.log("item already selected")
                   : setInput((prev) => {
                       return {
                         ...prev,
@@ -205,9 +225,9 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
 
           <div>
             {receipts.map((photo, index) => (
-              <div key={{ index }}>
+              <div key={{ index }} style={{ margin: "10px" }}>
                 <img src="/fixed/document.svg" />
-                <span>{photo.filepath}</span>
+                <span style={{ marginLeft: "10px" }}>{photo.filepath}</span>
                 <img
                   src="/fixed/CloseButton.svg"
                   className="picture-btn"
@@ -224,34 +244,129 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
         <div className="form-container">
           <label>Certificate Type</label>
           <Select
-            styles={typeStyle}
+            styles={certificateStyle}
+            options={options_certificate}
             className="basic-single"
             classNamePrefix="select"
             placeholder="If any"
+            onChange={(item) => {
+              setCertificateType(item.label);
+            }}
           />
           <div>
             <label>Certificate</label>
             <p>Upload a photo or digital copy of your item's certificate</p>
             <div>
-              <button className="upload-btn" onClick={openUpload}>
+              <button className="upload-btn" onClick={openUpload2}>
                 Upload
               </button>
-
               <div>
                 {certificate.map((photo, index) => (
-                  <div key={{ index }}>
+                  <div key={{ index }} style={{ margin: "10px" }}>
                     <img src="/fixed/document.svg" />
-                    <span>{photo.filepath}</span>
+                    <span style={{ marginLeft: "10px" }}>{photo.filepath}</span>
                     <img
                       src="/fixed/CloseButton.svg"
                       className="picture-btn"
                       onClick={(e) => {
                         e.preventDefault();
-                        deleteReceipts(index);
+                        deleteCertificate(index);
                       }}
                     />
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* start of footer accordion */}
+        <div className="form-footer">
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseOne"
+                aria-expanded="false"
+                aria-controls="collapseOne"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpanded(!expanded);
+                }}
+              >
+                <img src={expanded ? "/fixed/Minus.svg" : "/fixed/Plus.svg"} />
+                <span>Insurance Details</span>
+              </button>
+              <div
+                id="collapseOne"
+                class="accordion-collapse collapse"
+                aria-labelledby="headingOne"
+              >
+                <div class="accordion-body">
+                  <div className="form-container">
+                    <label>
+                      Insurance Details
+                      <input
+                        autoComplete="off"
+                        name="location"
+                        type="text"
+                        onChange={handleInputChange}
+                        value={input.location}
+                        placeholder="Insurer"
+                      />
+                      <input
+                        autoComplete="off"
+                        name="location"
+                        type="text"
+                        onChange={handleInputChange}
+                        value={input.location}
+                        placeholder="Insured Value"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseTwo"
+                aria-expanded="false"
+                aria-controls="collapseTwo"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpanded2(!expanded2);
+                }}
+              >
+                <img src={expanded2 ? "/fixed/Minus.svg" : "/fixed/Plus.svg"} />
+                <span>Inheritance Planning</span>
+              </button>
+              <div
+                id="collapseTwo"
+                class="accordion-collapse collapse"
+                aria-labelledby="headingTwo"
+              >
+                <div class="accordion-body">
+                  <div className="form-container">
+                    <label>
+                      Inheritance Planning
+                      <input
+                        autocomplete="off"
+                        name="location"
+                        type="text"
+                        value={input.location}
+                        placeholder="Recipient's Name"
+                      />
+                      <label>
+                        Notes
+                        <input type="text" placeholder="Additional Comments" />
+                      </label>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

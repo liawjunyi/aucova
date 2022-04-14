@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import { collection, onSnapshot, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
-import axios from "axios";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
 
 function MyPortfolio() {
   const [items, setItems] = useState([]);
@@ -95,9 +96,9 @@ function MyPortfolio() {
             }`}
           >
             <Link to="/portfolio/newentry">
-              <button className="add-btn">
-                <span>+</span>
-              </button>
+              <Fab className="roundbutton" aria-label="add">
+                <AddIcon />
+              </Fab>
             </Link>
           </div>
         </div>
