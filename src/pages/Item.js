@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Header from "../components/Header";
+import HeaderEntry from "../components/NewEntry/HeaderEntry";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import ItemSlider from "../components/ItemSlider";
@@ -53,9 +53,12 @@ function Item() {
     <>
       {items.length > 0 && (
         <>
-          <Header title={item.title}>
+          <HeaderEntry
+            title={item.category}
+            leftbutton={<img src="/fixed/Back.svg" />}
+          >
             <LongMenuItem deleteEntry={deleteEntry} options={options} />
-          </Header>
+          </HeaderEntry>
           <ItemSlider img={item.img} />
           <div className="form">
             <div>

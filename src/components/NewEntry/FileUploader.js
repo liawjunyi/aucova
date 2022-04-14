@@ -40,15 +40,15 @@ function FileUploader({
               return (
                 <div className="picture-container-item">
                   <img height="125px" width="150px" src={img} alt="file" />
-                  <button
+
+                  <img
+                    src="/fixed/CloseButton.svg"
+                    className="picture-btn"
                     onClick={(e) => {
                       e.preventDefault();
                       deletePicture(index);
                     }}
-                    className="picture-btn"
-                  >
-                    x
-                  </button>
+                  />
                 </div>
               );
             })}

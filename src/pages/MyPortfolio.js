@@ -43,7 +43,7 @@ function MyPortfolio() {
 
         <h1 className=" d-flex justify-content-center">The Duchess of Bling</h1>
       </div>
-      <Accordion style={{ width: "100%" }} defaultActiveKey="0">
+      <Accordion style={{ width: "100%" }}>
         <Accordion.Item eventKey="0">
           <Accordion.Header>
             <strong>Total Value</strong>

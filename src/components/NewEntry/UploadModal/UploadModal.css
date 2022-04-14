@@ -1,0 +1,52 @@
+.upload-modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+
+  width: 100vw;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+
+  z-index: 99;
+}
+
+.upload-modal.show {
+  display: block;
+}
+
+.upload-modal.hide {
+  display: none;
+}
+.upload-modal-content {
+  position: fixed;
+  bottom: -150vh;
+  width: 100%;
+  background-color: #fff;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  transition: bottom 0.3s ease-in-out;
+  z-index: 99;
+}
+
+.upload-modal-content.hide {
+  transform: -150vh;
+}
+
+.upload-modal-content.show {
+  bottom: 0;
+}
+.upload-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  border-bottom: 1px solid black;
+}
+
+.cancel-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 106px;
+}
