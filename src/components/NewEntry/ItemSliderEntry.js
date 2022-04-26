@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import Slider from "react-slick";
 
-import AddIcon from "@mui/icons-material/Add";
-const ItemSliderEntry = ({ imageFiles, selectedImage }) => {
+const ItemSliderEntry = ({ setInput, input }) => {
   const settings = {
     infinite: false,
     centerMode: true,
@@ -10,7 +9,7 @@ const ItemSliderEntry = ({ imageFiles, selectedImage }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  console.log(imageFiles);
+
   const filePickerRef = useRef(null);
 
   const addImageToPost = (e) => {
@@ -20,34 +19,41 @@ const ItemSliderEntry = ({ imageFiles, selectedImage }) => {
     }
 
     reader.onload = (readerEvent) => {
-      selectedImage((prev) => [...prev, readerEvent.target.result]);
+      setInput((prev) => {
+        return {
+          ...prev,
+          img: [...prev.img, readerEvent.target.result],
+        };
+      });
     };
   };
 
   const deletePicture = (removeIndex) => {
-    selectedImage(() => {
-      return imageFiles.filter((item, index) => index !== removeIndex);
+    setInput((prev) => {
+      return {
+        ...prev,
+        img: input.img.filter((item, index) => index !== removeIndex),
+      };
     });
   };
-  useEffect(() => {
-    selectedImage(imageFiles);
-  }, [imageFiles]);
 
   return (
     <div>
       <Slider {...settings}>
-        {imageFiles.map((item) => {
+        {input.img.map((item, index) => {
           return (
-            <div>
-              <img src={item} width="100%" height="150"></img>
+            <div onClick={() => deletePicture(index)}>
+              <img src={item} width="100%" height="189"></img>
             </div>
           );
         })}
-        <div
-          className="file-uploader"
-          onClick={() => filePickerRef.current.click()}
-        >
-          <AddIcon fontSize="large" />
+        <div>
+          <div
+            className="file-uploader"
+            onClick={() => filePickerRef.current.click()}
+          >
+            <img src="/fixed/AddIcon.svg" />
+          </div>
         </div>
       </Slider>
 

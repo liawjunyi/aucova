@@ -1,7 +1,14 @@
 import React from "react";
 import FileUploader from "./FileUploader";
 
-function NewEntry2({ category, selectedImage, filePickerFunc, imageFiles }) {
+function NewEntry2({
+  category,
+  selectedImage,
+  filePickerFunc,
+  imageFiles,
+  setInput,
+  input,
+}) {
   const renderSwitch = () => {
     switch (category) {
       case "rings":
@@ -29,7 +36,8 @@ function NewEntry2({ category, selectedImage, filePickerFunc, imageFiles }) {
         </div>
       </div>
       <FileUploader
-        orientation="Upload Pictures"
+        input={input}
+        setInput={setInput}
         selectedImage={selectedImage}
         filePickerFunc={filePickerFunc}
         imageFiles={imageFiles}

@@ -1,39 +1,147 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "./UploadModal.css";
 import { usePhotoGallery } from "../../../hooks/usePhotoGallery";
-import { FormContext } from "../../../context/FormContext";
 
-function UploadModal({ showUpload, setShowUpload }) {
-  const { setReceipts } = useContext(FormContext);
+import {
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+  uploadString,
+} from "firebase/storage";
+import { storage } from "../../../firebase";
+function UploadModal({
+  showUpload,
+  setShowUpload,
+  uploadClicked,
+  setInput,
+  input,
+}) {
+  function dataURLtoFile(dataUrl, fileName) {
+    var arr = dataUrl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], fileName, { type: mime });
+  }
   const fileUploadRef = useRef(null);
-  const uploadFile = (e) => {
-    const formData = new FormData();
+  const uploadFile = async (e) => {
+    const reader = new FileReader();
 
-    formData.append("File", e.target.files[0]);
-    console.log(...formData);
-    setReceipts((prev) => [
-      ...prev,
-      {
-        filepath: e.target.files[0].name,
-        webviewPath: formData,
-      },
-    ]);
+    const file = e.target.files[0];
+    console.log(file);
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+    reader.onload = (readerEvent) => {
+      if (uploadClicked === "upload") {
+        const imagesRef = ref(storage, `receipts/${file.name}`);
+        uploadBytesResumable(
+          imagesRef,
+          dataURLtoFile(readerEvent.currentTarget.result, file.name)
+        )
+          .then(() => getDownloadURL(imagesRef))
+          .then((url) =>
+            setInput((prev) => {
+              return {
+                ...prev,
+                receipts: [
+                  ...prev.receipts,
+                  {
+                    filePath: file.name,
+                    webPath: url,
+                  },
+                ],
+              };
+            })
+          );
+
+        // uploadTask.on("state_changed", (snapshot) => {
+        //   const prog = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        //   console.log(prog);
+        // });
+      } else {
+        const imagesRef = ref(storage, `certificate/${file.name}`);
+        uploadBytesResumable(
+          imagesRef,
+          dataURLtoFile(readerEvent.currentTarget.result, file.name)
+        )
+          .then(() => getDownloadURL(imagesRef))
+          .then((url) =>
+            setInput((prev) => {
+              return {
+                ...prev,
+                certificate: {
+                  ...prev.certificate,
+                  img: [
+                    ...prev.certificate.img,
+                    {
+                      filePath: file.name,
+                      webPath: url,
+                    },
+                  ],
+                },
+              };
+            })
+          );
+
+        // uploadTask.on("state_changed", (snapshot) => {
+        //   const prog = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        //   console.log(prog);
+        // });
+      }
+    };
     setShowUpload(false);
   };
+
   const { takePhoto, photos } = usePhotoGallery();
   useEffect(() => {
     if (photos) {
-      setReceipts((prev) => {
-        console.log(photos);
-        const fileName = new Date().getTime() + ".jpeg";
-        return [
-          ...prev,
-          {
-            filepath: fileName,
-            webviewPath: photos.webPath,
-          },
-        ];
-      });
+      if (uploadClicked === "upload") {
+        console.log(photos.dataUrl);
+
+        const fileName = new Date().getTime() + ".png";
+        console.log(dataURLtoFile(photos.dataUrl, fileName));
+        const imagesRef = ref(storage, `receipts/${fileName}`);
+
+        uploadString(imagesRef, photos.dataUrl, "data_url").then((snapshot) => {
+          const prog = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(prog);
+        });
+
+        setInput((prev) => {
+          return {
+            ...prev,
+            receipts: [
+              ...prev.receipts,
+              {
+                filepath: fileName,
+              },
+            ],
+          };
+        });
+      } else {
+        setInput((prev) => {
+          const fileName = new Date().getTime() + ".png";
+          const imagesRef = ref(storage, `certificate/${fileName}`);
+          const uploadTask = uploadBytesResumable(imagesRef, photos.webPath);
+          uploadTask.on("state_changed", (snapshot) => {
+            const prog =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(prog);
+          });
+          return {
+            ...prev,
+            certificate: {
+              ...prev.certificate,
+              img: [...prev.certificate.img, { filepath: fileName }],
+            },
+          };
+        });
+      }
     }
   }, [photos]);
 

@@ -1,8 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import "./Modal.css";
 
-const CancelModal = ({ show, onClose }) => {
+const CancelModal = ({ show, onClose, onSave }) => {
+  const navigate = useNavigate();
+
+  const redirect = () => {
+    navigate("/portfolio");
+  };
   return (
     <>
       {show && (
@@ -17,11 +23,13 @@ const CancelModal = ({ show, onClose }) => {
               entry.
             </div>
             <div className="modal-footer">
-              <Link to="/portfolio">
-                <button className="button btn-primary">Don't save</button>
-              </Link>
+              <button className="button btn-negative" onClick={redirect}>
+                Don't save
+              </button>
 
-              <button className="button btn-secondary">Save</button>
+              <button className="button btn-positive" onClick={onSave}>
+                Save
+              </button>
             </div>
           </div>
         </div>

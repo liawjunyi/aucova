@@ -1,7 +1,13 @@
 @font-face {
-  font-family: "Avenir Next";
+  font-family: "Avenir Medium";
 
-  src: url("../public/fonts/AvenirLTProMedium.otf");
+  src: url("../public/fonts/AvenirNextLTPro-Medium.otf");
+}
+
+@font-face {
+  font-family: "Avenir Regular";
+  src: url("../public/fonts/Avenir-Next-LT-Pro_5196.ttf");
+  font-weight: 400;
 }
 
 body {
@@ -11,27 +17,78 @@ body {
 :root {
   --primary: #b3995b;
 }
+/*-------------- typography -------------*/
+h1,
+h2,
+h3 {
+  font-family: "Old Standard TT", serif;
+  margin: 0;
+}
 
-datalist {
-  position: absolute;
-  background-color: white;
-  border: 1px solid black;
-  border-radius: 0 0 5px 5px;
-  border-top: none;
-  font-family: sans-serif;
-  width: 100%;
-  padding: 5px;
-  z-index: 9;
+h1 {
+  font-weight: 700;
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h5,
+h6,
+p {
+  font-family: "Avenir Regular";
+  margin: 0;
+}
+
+h4 {
+  font-weight: "Avenir Medium";
+  font-size: 16px;
+  margin: 0;
+}
+
+h5 {
+  font-size: 16px;
+  letter-spacing: 0.46px;
+  line-height: 26px;
+}
+
+h6 {
+  font-size: 12px;
+  line-height: 18.07px;
+}
+::placeholder {
+  margin: 0;
+  font-family: "Avenir Regular";
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: 0.46px;
+}
+p {
+  margin: 0;
+  font-family: "Avenir Regular";
+  font-size: 14px;
 }
 label {
-  font-family: "Avenir Next";
+  font-family: "Avenir Medium";
   font-size: 18px;
-  letter-spacing: 0.85px;
+  letter-spacing: 0.15px;
+  line-height: 24px;
 }
 a {
   color: grey;
 }
 
+span {
+  font-family: "Avenir Regular";
+  font-size: 16px;
+  letter-spacing: 0.46px;
+  line-height: 26px;
+}
 .search {
   margin: 10px;
 }
@@ -48,12 +105,10 @@ a {
   text-align: center;
   margin-top: 50px;
   font-family: "Old Standard TT", serif;
+  font-weight: 700;
   font-size: 32px;
 }
 
-.container {
-  display: table;
-}
 .navbar-toggler {
   border: none;
 }
@@ -68,10 +123,17 @@ a {
 
 .navbar-title {
   font-family: "Old Standard TT", serif;
+  font-weight: 700;
   font-size: 24px;
-  line-height: 36.14px;
-  display: table-cell;
-  vertical-align: middle;
+  text-align: center;
+  line-height: 56px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: -1;
 }
 .btn-close {
   right: 30px;
@@ -144,12 +206,15 @@ a {
   justify-content: center;
 }
 
-.item-container-body button {
+.item-container.button {
   background-color: var(--primary);
   color: white;
   position: sticky;
-  bottom: 0;
+  bottom: 5vh;
+  left: 75vw;
+  z-index: 9;
 }
+
 .categories-container {
   display: flex;
   justify-content: space-evenly;
@@ -200,9 +265,9 @@ a {
 }
 .file-uploader {
   background-color: #f2f0e6;
-  margin: 20px;
-  height: 125px;
-  width: 125px;
+  margin: 20px auto;
+  height: 110px;
+  width: 110px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -214,30 +279,150 @@ a {
   justify-content: center;
 }
 
+.compulsory-text {
+  font-family: "Avenir Regular";
+  display: flex;
+  color: #d22e0c;
+  justify-content: center;
+  margin-top: 19px;
+}
+
+.asterisk {
+  display: inline-block;
+  color: #d22e0c;
+  padding: 0 9px;
+}
+
+.col {
+  display: flex;
+  justify-content: center;
+}
+/*------------------ Intro -----------------*/
+
+.intro-container {
+  margin: 21px;
+}
+
+.intro-header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.intro-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 16px 31px 0;
+}
+
+.intro-button {
+  margin-bottom: 16px;
+  width: 100%;
+  border: 1px solid var(--primary);
+  height: 42px;
+  color: white;
+}
+
+.auth-container {
+  margin: 31px;
+}
+
+.auth-container .forgot-password {
+  margin-top: 48px;
+  margin-bottom: 52px;
+  text-decoration: underline;
+}
+
+.auth input,
+.auth label {
+  display: block;
+  text-align: left;
+  width: 100%;
+}
+
+.auth input:focus {
+  outline: none;
+}
+.auth input {
+  border-width: 0 0 1px 0;
+  margin-top: 43px;
+}
+
+.auth-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 36px;
+}
+
+.password-reset {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0 12px;
+}
+
+.password-reset-textBox {
+  margin: 0 40px;
+}
+
+.setup-container {
+  margin: 26px;
+}
+
+.intro-header.setup h2 {
+  margin: 20px 0 50px;
+}
+
+.setup-profile {
+  height: 84px;
+  width: 84px;
+  margin: 12px;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/*-------- item page details ---------------*/
+
+.detail-title {
+  background-color: #d9ccad;
+  display: flex;
+  align-items: center;
+  padding: 17px;
+  height: 40px;
+  font-family: "Old Standard TT", serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+}
 /*-------- form input fields ---------------*/
+
 .form {
-  margin: 17px;
+  margin: 21px 17px;
 }
 
 .form input,
-.form label {
+.form label,
+.form textarea {
   display: block;
   text-align: left;
   width: 100%;
 }
 
 .form label {
-  margin: 5px 0 5px 0;
-  padding: 0.5rem 0;
 }
 
-.form input {
-  border: solid black;
+.form input,
+.form textarea {
   border-width: 0 0 1px 0;
-  margin-top: 30px;
+  margin-top: 18.5px;
 }
 
-.form input:focus {
+.form input:focus,
+.form textarea:focus {
   outline: none;
 }
 
@@ -245,7 +430,7 @@ a {
   display: flex;
   position: relative;
   flex-direction: column;
-  margin: 20px 0 20px 0;
+  margin: 27px 0 27px 0;
 }
 
 .form .form-footer {
@@ -254,16 +439,6 @@ a {
 }
 .form > div > div {
   min-height: 30px;
-}
-
-.selected-type {
-  margin: 15px;
-}
-
-::-webkit-input-placeholder {
-  /* Chrome/Opera/Safari */
-  font-size: 16px;
-  letter-spacing: 0.46px;
 }
 
 .saveBtn {
@@ -279,17 +454,30 @@ a {
 .slick-slider {
   overflow: hidden;
 }
+
+.slick-list {
+  margin: 20px 0 !important;
+}
 .slick-arrow {
   display: none !important;
 }
 
 .upload-btn {
   padding: 5px;
+  margin-top: 20px;
   height: 38px;
   width: 100%;
+  background-color: white;
+  border: 1px solid var(--primary);
+  font-family: "Avenir Regular";
 }
 
 /*------------ Accordion settings --------------*/
+.accordion-button {
+  font-family: "Avenir Regular";
+  font-size: 20px;
+  line-height: 24px;
+}
 .accordion-button:not(.collapsed) {
   color: black;
   background-color: white;

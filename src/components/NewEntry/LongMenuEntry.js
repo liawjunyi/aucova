@@ -45,8 +45,14 @@ export default function LongMenuEntry({ options, deleteEntry }) {
           },
         }}
       >
-        {options.map((option) => (
-          <MenuItem key={option}>{option}</MenuItem>
+        {options.map((option, index) => (
+          <MenuItem
+            key={option}
+            disabled={index === 2 || index === 3}
+            selected={index === 1}
+          >
+            {option}
+          </MenuItem>
         ))}
       </Menu>
     </div>

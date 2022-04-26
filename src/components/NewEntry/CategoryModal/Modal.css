@@ -9,7 +9,7 @@
   left: 0;
   top: 0;
   transition: transform 0.3s;
-  z-index: 99;
+  z-index: 90;
   overflow: scroll;
 }
 
@@ -38,14 +38,15 @@
   padding: 10px;
 }
 
-.nav-item {
+.categorymenu .nav-item {
   line-height: 26px;
-  height: 60px;
+  height: 70px;
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: left;
 }
 
-.navbar-nav {
-  width: 100%;
+.categorymenu .navbar-nav {
+  width: 66%;
+  margin-top: 50px;
 }

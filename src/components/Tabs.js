@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-function Tabs({ items }) {
+function Tabs({ items, setShow }) {
   return (
     <>
       <nav>
@@ -56,6 +56,12 @@ function Tabs({ items }) {
           role="tabpanel"
           aria-labelledby="nav-home-tab"
         >
+          <div
+            style={{ display: "flex", padding: "16px", justifyContent: "end" }}
+            onClick={() => setShow(true)}
+          >
+            <img src="/fixed/FilterButton.svg" />
+          </div>
           <div class="container">
             <div class="row row-cols-2">
               {items.map((item) => {

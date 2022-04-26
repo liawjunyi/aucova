@@ -1,13 +1,12 @@
 import { useState } from "react";
-
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
 export function usePhotoGallery() {
   const [photos, setPhotos] = useState();
-  const takePhoto = async (e) => {
+  const takePhoto = async () => {
     setPhotos();
     const photo = await Camera.getPhoto({
-      resultType: CameraResultType.Uri,
+      resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera,
       quality: 100,
     });

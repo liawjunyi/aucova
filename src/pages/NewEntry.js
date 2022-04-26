@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, createRef } from "react";
 import { useNavigate } from "react-router-dom";
-import HeaderEntry from "../components/NewEntry/HeaderEntry";
+import Header from "../components/Header";
 import NewEntry2 from "../components/NewEntry/NewEntry2";
 import NewEntry3 from "../components/NewEntry/NewEntry3";
 import LongMenuEntry from "../components/NewEntry/LongMenuEntry";
@@ -8,15 +8,15 @@ import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import { FormContext } from "../context/FormContext";
 import CancelModal from "../components/NewEntry/CancelModal/CancelModal";
+import { getStorage, ref } from "firebase/storage";
 
 function NewEntry() {
-  const [state, setState] = useState(1);
   const [show, setShow] = useState(false);
-
+  const [state, setState] = useState(1);
   const [input, setInput] = useState({
     category: "",
-    title: "",
-    img: "",
+    title: null,
+    img: [],
     type: [],
     description: "",
     location: "",
@@ -24,16 +24,23 @@ function NewEntry() {
       currency: "",
       value: "",
     },
+    receipts: [],
+    certificate: {
+      type: "",
+      img: [],
+    },
+    insurance: {
+      name: "",
+      value: "",
+    },
+    inheritance: {
+      name: "",
+      comments: "",
+    },
   });
   const [categoryClicked, setCategoryClicked] = useState(null);
   const [imageFiles, setImageFiles] = useState([]);
-  const [receipts, setReceipts] = useState([]);
-  const [certificate, setCertificate] = useState([]);
-  const [certificateType, setCertificateType] = useState(null);
-  const [insurer, setInsurer] = useState(null);
-  const [insuredValue, setInsuredValue] = useState(null);
-  const [inheritanceName, setInheritanceName] = useState(null);
-  const [additionalComments, setAdditionalComments] = useState(null);
+
   useEffect(() => {
     setInput((prev) => {
       return {
@@ -47,17 +54,10 @@ function NewEntry() {
     setImageFiles(image);
   };
 
-  console.log(receipts);
-  console.log(certificate);
-  console.log(certificateType);
-  const handleClose = () => setShow(false);
-  const handleSave = () => {
-    //   save as draft function
-  };
-
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log({ ...input });
     await addDoc(collection(db, "items"), {
       ...input,
     }).then((document) =>
@@ -75,13 +75,21 @@ function NewEntry() {
     "Marketplace",
   ];
 
-  const ringsRef = useRef(null);
-  const earringsRef = useRef(null);
-  const pendantsRef = useRef(null);
-  const braceletsRef = useRef(null);
-  const broochesRef = useRef(null);
-  const othersRef = useRef(null);
+  const categories = [
+    "Rings",
+    "Earrings",
+    "Pendants",
+    "Bracelets",
+    "Brooches",
+    "Gems",
+    "Others",
+  ];
 
+  const categoryRefs = useRef([]);
+  categoryRefs.current = categories.map(
+    (_, i) => categoryRefs.current[i] ?? createRef()
+  );
+  console.log(categoryRefs.current);
   const categoryOnClick = (e) => {
     setCategoryClicked(e.target.value);
   };
@@ -94,144 +102,67 @@ function NewEntry() {
       };
     });
   }, [categoryClicked]);
-
+  console.log(input);
   return (
     <div>
-      <CancelModal show={show} onClose={() => setShow(false)} />
       <FormContext.Provider
         value={{
           input,
           setInput,
-          setReceipts,
-          receipts,
-          certificate,
-          setCertificate,
-          setCertificateType,
-          setInsurer,
-          setInsuredValue,
-          setInheritanceName,
-          setAdditionalComments,
+          setImageFiles,
+          setShow,
         }}
       >
+        <CancelModal
+          show={show}
+          onClose={() => setShow(false)}
+          onSave={handleSubmit}
+        />
         <form>
           {state === 1 && (
             <>
-              <HeaderEntry
+              <Header
                 title="New Entry"
                 leftButton={<img src="/fixed/Vector.png" />}
                 handleLeftButton={(e) => {
                   e.preventDefault();
-
+                  console.log("sdfsd");
                   setShow(true);
                 }}
               />
               <div>What will you add to your porfolio today?</div>
 
               <div className="categories-container">
-                <div
-                  className="category"
-                  onClick={(e) => {
-                    ringsRef.current.click();
-                    setState(2);
-                  }}
-                >
-                  <img src="/categories/rings.svg"></img>
-                </div>
-                <div
-                  className="category"
-                  onClick={(e) => {
-                    earringsRef.current.click();
-                    setState(2);
-                  }}
-                >
-                  <img src="/categories/earrings.svg"></img>
-                </div>
-                <div
-                  className="category"
-                  onClick={(e) => {
-                    pendantsRef.current.click();
-                    setState(2);
-                  }}
-                >
-                  <img src="/categories/pendants.svg"></img>
-                </div>
-                <div
-                  className="category"
-                  onClick={(e) => {
-                    braceletsRef.current.click();
-                    setState(2);
-                  }}
-                >
-                  <img src="/categories/bracelets.svg"></img>
-                </div>
-                <div
-                  className="category"
-                  onClick={(e) => {
-                    broochesRef.current.click();
-                    setState(2);
-                  }}
-                >
-                  <img src="/categories/brooches.svg"></img>
-                </div>
-                <div
-                  className="category"
-                  onClick={(e) => {
-                    othersRef.current.click();
-                    setState(2);
-                  }}
-                >
-                  <img src="/categories/others.svg"></img>
-                </div>
-                <input
-                  type="radio"
-                  value="Rings"
-                  ref={ringsRef}
-                  hidden
-                  onChange={categoryOnClick}
-                />
-                <input
-                  type="radio"
-                  value="Earrings"
-                  ref={earringsRef}
-                  hidden
-                  onChange={categoryOnClick}
-                />
-                <input
-                  type="radio"
-                  value="Pendants"
-                  ref={pendantsRef}
-                  hidden
-                  onChange={categoryOnClick}
-                />
-                <input
-                  type="radio"
-                  value="Bracelets"
-                  ref={braceletsRef}
-                  hidden
-                  onChange={categoryOnClick}
-                />
-                <input
-                  type="radio"
-                  value="Brooches"
-                  ref={broochesRef}
-                  hidden
-                  onChange={categoryOnClick}
-                />
-                <input
-                  type="radio"
-                  value="Others"
-                  ref={othersRef}
-                  hidden
-                  onChange={categoryOnClick}
-                />
+                {categories.map((category, index) => {
+                  return (
+                    <>
+                      <div
+                        className="category"
+                        onClick={(e) => {
+                          categoryRefs.current[index].current.click();
+                          setState(2);
+                        }}
+                      >
+                        <img src={`/categories/${category}.svg`}></img>
+                      </div>
+                      <input
+                        type="radio"
+                        value={category}
+                        ref={categoryRefs.current[index]}
+                        hidden
+                        onChange={categoryOnClick}
+                      />
+                    </>
+                  );
+                })}
               </div>
             </>
           )}
           {state === 2 && (
             <>
-              <HeaderEntry
+              <Header
                 title="New Entry"
-                leftButton="Back"
+                leftButton={<img src="/fixed/Back.svg" />}
                 handleLeftButton={() => {
                   if (state === 2) {
                     setState(1);
@@ -239,10 +170,12 @@ function NewEntry() {
                     setShow(true);
                   }
                 }}
-                rightButton="next"
+                rightButton={<img src="/fixed/Next.svg" />}
                 handleRightButton={() => setState(3)}
               />
               <NewEntry2
+                input={input}
+                setInput={setInput}
                 category={categoryClicked}
                 selectedImage={selectedImage}
                 imageFiles={imageFiles}
@@ -251,7 +184,7 @@ function NewEntry() {
           )}
           {state === 3 && (
             <>
-              <HeaderEntry
+              <Header
                 title="Add Details"
                 leftButton={<img src="/fixed/Vector.png" />}
                 handleLeftButton={(e) => {

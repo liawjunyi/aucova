@@ -1,4 +1,13 @@
-import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Link,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+import { auth } from "../firebase";
+import { logout, selectUser } from "../redux/authSlice";
 
 function Menu(props) {
   let className = "menu";
@@ -7,6 +16,20 @@ function Menu(props) {
   } else {
     className += " hide";
   }
+
+  const user = useSelector(selectUser);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleAuthentication = () => {
+    if (user) {
+      dispatch(logout());
+      signOut(auth).then(() => {
+        navigate("/intro");
+      });
+    } else {
+      navigate("/intro");
+    }
+  };
 
   return (
     <div className={className} id="flyoutMenu">
@@ -36,10 +59,8 @@ function Menu(props) {
             My Portfolio
           </Link>
         </li>
-        <li className="nav-item">
-          <a className="nav-link " href="#">
-            Log out
-          </a>
+        <li className="nav-item" onClick={() => handleAuthentication()}>
+          {user ? "Log out" : "Log In"}
         </li>
       </ul>
     </div>

@@ -1,12 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
-import AddIcon from "@mui/icons-material/Add";
+import React, { useRef } from "react";
 
-function FileUploader({
-  orientation,
-  selectedImage,
-  filePickerFunc,
-  imageFiles,
-}) {
+function FileUploader({ selectedImage, imageFiles, setInput, input }) {
   const filePickerRef = useRef(null);
 
   const addImageToPost = (e) => {
@@ -16,27 +10,31 @@ function FileUploader({
     }
 
     reader.onload = (readerEvent) => {
-      selectedImage((prev) => [...prev, readerEvent.target.result]);
+      setInput((prev) => {
+        return {
+          ...prev,
+          img: [...prev.img, readerEvent.target.result],
+        };
+      });
     };
   };
 
   const deletePicture = (removeIndex) => {
-    selectedImage(() => {
-      return imageFiles.filter((item, index) => index !== removeIndex);
+    setInput((prev) => {
+      return {
+        ...prev,
+        img: input.img.filter((item, index) => index !== removeIndex),
+      };
     });
   };
-  // useEffect(() => {
-  //   selectedImage(selectedFile);
-
-  // }, [selectedFile]);
-
+  console.log(imageFiles);
   return (
     <div>
       <div className="picture-header">Upload Pictures</div>
-      {imageFiles ? (
+      {input.img.length > 0 ? (
         <>
           <div className="picture-container">
-            {imageFiles.map((img, index) => {
+            {input.img.map((img, index) => {
               return (
                 <div className="picture-container-item">
                   <img height="125px" width="150px" src={img} alt="file" />
@@ -52,21 +50,24 @@ function FileUploader({
                 </div>
               );
             })}
-
-            <div
-              className="file-uploader"
-              onClick={() => filePickerRef.current.click()}
-            >
-              <AddIcon fontSize="large" />
+            <div style={{ height: "110px", width: "110px", margin: "0 37px" }}>
+              <div
+                className="file-uploader"
+                onClick={() => filePickerRef.current.click()}
+              >
+                <img src="/fixed/AddIcon.svg" />
+              </div>
             </div>
           </div>
         </>
       ) : (
-        <div
-          className="file-uploader"
-          onClick={() => filePickerRef.current.click()}
-        >
-          <AddIcon fontSize="large" />
+        <div style={{ height: "110px", width: "110px", margin: "0 37px" }}>
+          <div
+            className="file-uploader"
+            onClick={() => filePickerRef.current.click()}
+          >
+            <img src="/fixed/AddIcon.svg" />
+          </div>
         </div>
       )}
 

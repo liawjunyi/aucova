@@ -1,10 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import CategoryModal from "./CategoryModal/CategoryModal";
 import ItemSliderEntry from "./ItemSliderEntry";
 import Select from "react-select";
 import UploadModal from "./UploadModal/UploadModal";
-import UploadModal2 from "./UploadModal/UploadModal2";
-import { FormContext } from "../../context/FormContext";
+import { storage } from "../../firebase";
+import { deleteObject, ref } from "firebase/storage";
 import {
   options_type,
   options_currency,
@@ -14,27 +14,16 @@ import {
   certificateStyle,
 } from "./SelectStyles";
 
-function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
+function NewEntry3({ imageFiles, input, setInput }) {
   const [show, setShow] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
-  const [showUpload2, setShowUpload2] = useState(false);
+  const [uploadClicked, setUploadClicked] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
-  const {
-    input,
-    setInput,
-    receipts,
-    setReceipts,
-    certificate,
-    setCertificate,
-    setCertificateType,
-    setInsurer,
-    setInsuredValue,
-    setInheritanceName,
-    setAdditionalComments,
-  } = useContext(FormContext);
+
   const handleInputChange = (e) => {
     const { value, name } = e.target;
+
     setInput((prev) => {
       return {
         ...prev,
@@ -46,35 +35,70 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
 
   const openUpload = (e) => {
     e.preventDefault();
+
+    setUploadClicked(e.target.name);
     setShowUpload(true);
   };
-  const openUpload2 = (e) => {
-    e.preventDefault();
 
-    setShowUpload2(true);
-  };
-  const deleteCertificate = (removeIndex) => {
-    setCertificate(() => {
-      return certificate.filter((item, index) => index !== removeIndex);
+  const deleteCertificate = (removeIndex, fileName) => {
+    setInput((prev) => {
+      return {
+        ...prev,
+        certificate: {
+          ...prev.certificate,
+          img: input.certificate.img.filter(
+            (item, index) => index !== removeIndex
+          ),
+        },
+      };
     });
+    const certificateRef = ref(storage, `certificate/${fileName}`);
+    deleteObject(certificateRef);
   };
-  const deleteReceipts = (removeIndex) => {
-    setReceipts(() => {
-      return receipts.filter((item, index) => index !== removeIndex);
+
+  const deleteReceipts = (removeIndex, fileName) => {
+    setInput((prev) => {
+      return {
+        ...prev,
+        receipts: input.receipts.filter((item, index) => index !== removeIndex),
+      };
     });
+    const receiptsRef = ref(storage, `receipts/${fileName}`);
+    deleteObject(receiptsRef);
   };
+  console.log(input.receipts);
+
+  const categories = [
+    "Rings",
+    "Earrings",
+    "Pendants / Necklaces",
+    "Bracelets / Bangles",
+    "Brooches",
+    "Gems",
+    "Others",
+  ];
   return (
     <div>
-      <UploadModal showUpload={showUpload} setShowUpload={setShowUpload} />
-      <UploadModal2 showUpload2={showUpload2} setShowUpload2={setShowUpload2} />
-      <ItemSliderEntry imageFiles={imageFiles} selectedImage={selectedImage} />
-      <p>Tap photos to delete or replace</p>
+      <UploadModal
+        showUpload={showUpload}
+        setShowUpload={setShowUpload}
+        uploadClicked={uploadClicked}
+        setInput={setInput}
+        input={input}
+      />
+
+      <ItemSliderEntry
+        imageFiles={imageFiles}
+        setInput={setInput}
+        input={input}
+      />
+      <p style={{ margin: "0 50px 15px" }}>Tap photos to delete or replace</p>
       <div>
         <div className="accordion" onClick={() => setShow(true)}>
           <div className="accordion-item">
             <div className="accordion-header">
-              <div className="accordion-button collapsed">
-                <strong>{category}</strong>
+              <div className="accordion-button collapsed ">
+                <div>{input.category}</div>
               </div>
             </div>
           </div>
@@ -82,16 +106,22 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
         <CategoryModal
           show={show}
           onClose={() => setShow(false)}
-          setCategory={setCategory}
+          setInput={setInput}
+          header="category"
+          categories={categories}
         />
       </div>
-
+      <div className="compulsory-text ">
+        <p>* indicates compulsory field, all others optional.</p>
+      </div>
       <div className="form">
         <div className="form-container">
           <label>
             Title of Piece
+            <div className="asterisk">*</div>
             <input
               autocomplete="off"
+              required="required"
               name="title"
               type="text"
               onChange={handleInputChange}
@@ -103,6 +133,7 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
         <div className="form-container">
           <label>
             Diamonds / Gem Stones
+            <p>Input type of stone and select from the list</p>
             <Select
               styles={typeStyle}
               className="basic-multi-select"
@@ -123,19 +154,21 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
             <div className="selected-type">
               {input.type.map((type, index) => {
                 return (
-                  <span
+                  <div
                     style={{
+                      display: "inline-block",
+                      marginTop: "14px",
                       marginRight: "10px",
-
-                      border: "1px solid #B3995B",
-                      borderTopRightRadius: "50px",
-                      borderTopLeftRadius: "50px",
-                      borderBottomRightRadius: "50px",
-                      borderBottomLeftRadius: "50px",
+                      border: "2px solid #B3995B",
+                      borderRadius: "26px",
+                      padding: "5px 12px 5px 12px",
+                      width: "fit-content",
                     }}
                   >
                     {type}
+
                     <img
+                      style={{ margin: "0 0 4px 5px" }}
                       src="/fixed/CloseButton.svg"
                       onClick={() =>
                         setInput((prev) => {
@@ -148,7 +181,7 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
                         })
                       }
                     />
-                  </span>
+                  </div>
                 );
               })}
             </div>
@@ -157,13 +190,16 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
         <div className="form-container">
           <label>
             Description
-            <input
-              autocomplete="off"
+            <textarea
+              autoComplete="off"
+              rows="4"
               name="description"
               type="text"
               onChange={handleInputChange}
               value={input.description}
-              placeholder="Eg. Birthday present to myself"
+              placeholder="Eg. “Birthday present to myself”, “Gift from
+              Grandma”, or any other details you want to
+              include for yourself."
             />
           </label>
         </div>
@@ -183,10 +219,14 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
         <div className="form-container">
           <label>
             Purchase Price
+            <p>Historical Value</p>
             <div style={{ display: "flex", flexDirection: "row" }}>
               <Select
                 styles={currencyStyle}
                 className="basic-single"
+                value={options_currency.filter(
+                  (option) => option.label === input.purchase_price.currency
+                )}
                 classNamePrefix="select"
                 placeholder="SGD $"
                 options={options_currency}
@@ -204,73 +244,114 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
               />
               <span style={{ margin: "5px" }}></span>
               <input
-                autocomplete="off"
+                autoComplete="off"
                 name="purchase_price"
                 type="number"
-                onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  if (["e", "+", "-"].includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onChange={(e) => {
+                  setInput((prev) => {
+                    return {
+                      ...prev,
+                      purchase_price: {
+                        ...prev.purchase_price,
+                        value: e.target.value,
+                      },
+                    };
+                  });
+                }}
                 value={input.purchase_price.value}
               />
             </div>
           </label>
         </div>
 
+        {/*--------------------------- Receipts & Documents ----------------------------*/}
         <div className="form-container">
-          <label>Receipts & Documents</label>
-          <p>upload documents and receipts</p>
-          <div>
-            <button className="upload-btn" onClick={openUpload}>
-              Upload
-            </button>
-          </div>
+          <label>
+            Receipts & Documents
+            <p>Upload receipts or any other relevant documents.</p>
+            <div>
+              <button
+                className="upload-btn"
+                onClick={(e) => openUpload(e)}
+                name="upload"
+              >
+                Upload
+              </button>
+            </div>
+          </label>
 
           <div>
-            {receipts.map((photo, index) => (
+            {input.receipts.map((receipt, index) => (
               <div key={{ index }} style={{ margin: "10px" }}>
                 <img src="/fixed/document.svg" />
-                <span style={{ marginLeft: "10px" }}>{photo.filepath}</span>
+                <span style={{ marginLeft: "10px" }}>{receipt.filePath}</span>
+
                 <img
                   src="/fixed/CloseButton.svg"
                   className="picture-btn"
                   onClick={(e) => {
                     e.preventDefault();
-                    deleteReceipts(index);
+                    deleteReceipts(index, receipt.filePath);
                   }}
                 />
               </div>
             ))}
           </div>
         </div>
-
+        {/*--------------------------- Certificate ----------------------------*/}
         <div className="form-container">
           <label>Certificate Type</label>
           <Select
             styles={certificateStyle}
+            value={options_certificate.filter(
+              (option) => option.label === input.certificate.type
+            )}
             options={options_certificate}
             className="basic-single"
             classNamePrefix="select"
             placeholder="If any"
             onChange={(item) => {
-              setCertificateType(item.label);
+              setInput((prev) => {
+                return {
+                  ...prev,
+                  certificate: {
+                    ...prev.certificate,
+                    type: item.label,
+                  },
+                };
+              });
             }}
           />
-          <div>
+          <div style={{ margin: "20px 10px" }}>
             <label>Certificate</label>
-            <p>Upload a photo or digital copy of your item's certificate</p>
+            <p>
+              Upload a photo or digital copy of your item’s certificate. (Files
+              accepted: .jpg, .png, .pdf, .doc)
+            </p>
             <div>
-              <button className="upload-btn" onClick={openUpload2}>
+              <button
+                className="upload-btn"
+                name="upload1"
+                onClick={(e) => openUpload(e)}
+              >
                 Upload
               </button>
               <div>
-                {certificate.map((photo, index) => (
+                {input.certificate.img.map((cert, index) => (
                   <div key={{ index }} style={{ margin: "10px" }}>
                     <img src="/fixed/document.svg" />
-                    <span style={{ marginLeft: "10px" }}>{photo.filepath}</span>
+                    <span style={{ marginLeft: "10px" }}>{cert.filePath}</span>
                     <img
                       src="/fixed/CloseButton.svg"
                       className="picture-btn"
                       onClick={(e) => {
                         e.preventDefault();
-                        deleteCertificate(index);
+                        deleteCertificate(index, cert.filePath);
                       }}
                     />
                   </div>
@@ -279,7 +360,7 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
             </div>
           </div>
         </div>
-        {/* start of footer accordion */}
+        {/*------------------ start of footer accordion --------------------------- */}
         <div className="form-footer">
           <div class="accordion" id="accordionExample">
             <div class="accordion-item">
@@ -309,18 +390,44 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
                       Insurance Details
                       <input
                         autoComplete="off"
-                        name="location"
+                        name="name"
                         type="text"
-                        onChange={handleInputChange}
-                        value={input.location}
+                        onChange={(e) =>
+                          setInput((prev) => {
+                            console.log({ ...prev.insurance });
+                            return {
+                              ...prev,
+                              insurance: {
+                                ...prev.insurance,
+                                name: e.target.value,
+                              },
+                            };
+                          })
+                        }
+                        value={input.insurance.name}
                         placeholder="Insurer"
                       />
                       <input
-                        autoComplete="off"
-                        name="location"
-                        type="text"
-                        onChange={handleInputChange}
-                        value={input.location}
+                        name="value"
+                        type="number"
+                        onKeyDown={(e) => {
+                          if (["e", "+", "-"].includes(e.key)) {
+                            e.preventDefault();
+                          }
+                        }}
+                        onChange={(e) =>
+                          setInput((prev) => {
+                            console.log({ ...prev.insurance });
+                            return {
+                              ...prev,
+                              insurance: {
+                                ...prev.insurance,
+                                value: e.target.value,
+                              },
+                            };
+                          })
+                        }
+                        value={input.insurance.value}
                         placeholder="Insured Value"
                       />
                     </label>
@@ -353,17 +460,53 @@ function NewEntry3({ imageFiles, selectedImage, category, setCategory }) {
                   <div className="form-container">
                     <label>
                       Inheritance Planning
-                      <input
-                        autocomplete="off"
-                        name="location"
-                        type="text"
-                        value={input.location}
-                        placeholder="Recipient's Name"
-                      />
-                      <label>
-                        Notes
-                        <input type="text" placeholder="Additional Comments" />
-                      </label>
+                      <div style={{ display: "flex", flexDirection: "row" }}>
+                        <span
+                          style={{ paddingTop: "19px", marginRight: "10px" }}
+                        >
+                          For:
+                        </span>
+                        <input
+                          autocomplete="off"
+                          name="name"
+                          type="text"
+                          onChange={(e) =>
+                            setInput((prev) => {
+                              return {
+                                ...prev,
+                                inheritance: {
+                                  ...prev.inheritance,
+                                  name: e.target.value,
+                                },
+                              };
+                            })
+                          }
+                          value={input.inheritance.name}
+                          placeholder="Recipient's Name"
+                        />
+                      </div>
+                      <div style={{ margin: "20px 10px" }}>
+                        <label>
+                          Notes
+                          <input
+                            type="text"
+                            name="comments"
+                            placeholder="Additional Comments"
+                            value={input.inheritance.comments}
+                            onChange={(e) =>
+                              setInput((prev) => {
+                                return {
+                                  ...prev,
+                                  inheritance: {
+                                    ...prev.inheritance,
+                                    comments: e.target.value,
+                                  },
+                                };
+                              })
+                            }
+                          />
+                        </label>
+                      </div>
                     </label>
                   </div>
                 </div>
