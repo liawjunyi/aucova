@@ -5,6 +5,7 @@ import Menu from "../components/Menu";
 import LogIn from "../components/Login/LogIn";
 import SignUp from "../components/Login/SignUp";
 import ForgotPassword from "../components/Login/ForgotPassword";
+import ForgotPasswordSuccess from "../components/Login/ForgotPasswordSuccess";
 
 function Intro() {
   const [visible, setVisible] = useState(false);
@@ -78,6 +79,7 @@ function Intro() {
                     <b>Log In</b>
                   </h5>
                 </button>
+                <div style={{ margin: "8px 0 " }}></div>
                 <button
                   className="intro-button btn-positive"
                   onClick={() => setState(2)}
@@ -93,6 +95,7 @@ function Intro() {
         {state === 1 && <LogIn setState={setState} />}
         {state === 2 && <SignUp setState={setState} />}
         {state === 3 && <ForgotPassword setState={setState} />}
+        {state === 4 && <ForgotPasswordSuccess setState={setState} />}
       </div>
     </div>
   );

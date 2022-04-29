@@ -27,15 +27,18 @@
   width: 100%;
   border: 1px solid var(--primary);
   height: 52px;
+  margin-bottom: 9px;
 }
 
 .btn-negative {
   background-color: white;
   border: 1px solid var(--primary);
+  color: black;
 }
 
 .btn-positive {
   background-color: var(--primary);
+  color: white;
 }
 .btn-close {
   position: absolute;

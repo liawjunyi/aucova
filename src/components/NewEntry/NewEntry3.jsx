@@ -67,6 +67,7 @@ function NewEntry3({ imageFiles, input, setInput }) {
     deleteObject(receiptsRef);
   };
   console.log(input.receipts);
+  console.log(input);
 
   const categories = [
     "Rings",

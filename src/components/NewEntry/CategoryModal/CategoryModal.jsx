@@ -23,7 +23,12 @@ function CategoryModal({ show, onClose, setInput, header, categories }) {
             <li
               className="nav-item"
               onClick={() => {
-                setInput(cat);
+                setInput((prev) => {
+                  return {
+                    ...prev,
+                    category: cat,
+                  };
+                });
                 onClose();
               }}
               value={cat}

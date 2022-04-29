@@ -12,11 +12,9 @@ function SignUp({ setState }) {
   const register = () => {
     if (password === confirmPassword) {
       createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          console.log(user);
+        .then(() => {
+          navigate("/setup");
         })
-        .then(() => navigate("/setup"))
         .catch((err) => alert(err.message));
     } else {
       alert("please ensure password matches");

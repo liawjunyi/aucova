@@ -1,7 +1,16 @@
+import { sendPasswordResetEmail } from "firebase/auth";
 import React, { useState } from "react";
+import { auth } from "../../firebase";
 
 function ForgotPassword({ setState }) {
   const [email, setEmail] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendPasswordResetEmail(auth, email)
+      .then(() => setState(4))
+      .catch((err) => alert(err.message));
+  };
   return (
     <>
       <div className="intro-header">
@@ -29,20 +38,22 @@ function ForgotPassword({ setState }) {
         </h5>
       </div>
       <div className="auth-container">
-        <div className="auth">
-          <input
-            type="text"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="forgot-password"></div>
-        <button className="intro-button btn-positive" onClick={() => {}}>
-          <h5>
-            <b>Reset Password</b>
-          </h5>
-        </button>
+        <form onSubmit={handleSubmit}>
+          <div className="auth">
+            <input
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="forgot-password"></div>
+          <button className="intro-button btn-positive">
+            <h5>
+              <b>Reset Password</b>
+            </h5>
+          </button>
+        </form>
         <div className="auth-footer">
           <span>Back to </span>
           <span

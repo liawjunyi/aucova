@@ -12,7 +12,7 @@ export default function Homepage() {
     setVisible(!visible);
   };
   return (
-    <div>
+    <>
       <Header
         title="AUCOVA"
         leftButton={<MenuButton handleMouseDown={handleMouseDown} />}
@@ -25,6 +25,6 @@ export default function Homepage() {
       <Link className="position-absolute end-0" to="/dispatch">
         Read More
       </Link>
-    </div>
+    </>
   );
 }
